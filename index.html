@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KalKatalog RJU</title>
+
+<!-- GOOGLE ANALYTICS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXXXXX');
+</script>
+
+<style>
+
+body{
+font-family:"Segoe UI",Arial,sans-serif;
+background: linear-gradient(135deg,#1e3c72,#2a5298);
+margin:0;
+padding:20px;
+min-height:100vh;
+}
+
+.container{
+max-width:750px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 15px 35px rgba(0,0,0,0.2);
+}
+
+.header{
+text-align:center;
+margin-bottom:20px;
+}
+
+.header h1{
+margin:0;
+color:#2c3e50;
+}
+
+.header p{
+margin-top:5px;
+color:#666;
+font-size:14px;
+}
+
+label{
+display:block;
+margin-top:15px;
+font-weight:600;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:18px;
+border:none;
+border-radius:8px;
+background:#007bff;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+.wa-btn{
+background:#25D366;
+}
+
+.result{
+margin-top:20px;
+padding:18px;
+background:#f1f8ff;
+border-radius:8px;
+font-size:18px;
+text-align:center;
+font-weight:bold;
+}
+
+.preview{
+margin-top:15px;
+text-align:center;
+}
+
+.preview img{
+max-width:250px;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>KalKatalog RJU</h1>
+<p>Kalkulator Katalog Retribusi Jasa Usaha</p>
+</div>
+
+<label>Titik Lokasi Pemasangan</label>
+<select id="lokasi" onchange="updateGambar()">
+<option value="KB">KB Samsat Magetan</option>
+<option value="UPT">UPT PPD Magetan</option>
+</select>
+
+<label>Jenis Pemasangan Iklan</label>
+<select id="jenis" onchange="aturForm(); updateGambar();">
+<option value="Banner">Spanduk / Banner / Baliho</option>
+<option value="Tenda">Tenda Promosi</option>
+<option value="Kotak">Kotak Promosi / Brosur</option>
+</select>
+
+<div class="preview">
+<img id="gambarJenis" src="banner_kb.jpg">
+</div>
+
+<div id="inputLuas">
+<label>Luas Banner (m²)</label>
+<input type="number" id="luas" placeholder="Masukkan luas banner">
+</div>
+
+<div id="inputTitik" style="display:none;">
+<label>Jumlah Titik</label>
+<input type="number" id="titik" placeholder="Masukkan jumlah titik">
+</div>
+
+<label id="labelHari">Periode (1 Bulan)</label>
+<input type="number" id="hari" value="1" readonly>
+
+<label>Nama Pemesan</label>
+<input type="text" id="namaPemesan" placeholder="Masukkan nama pemesan">
+
+<button onclick="hitungRetribusi()">Hitung Retribusi</button>
+
+<div class="result" id="hasil">
+Total Retribusi: Rp 0
+</div>
+
+<button class="wa-btn" onclick="kirimWhatsApp()">
+Kirim via WhatsApp
+</button>
+
+</div>
+
+<script>
+
+function aturForm() {
+
+const jenis = document.getElementById('jenis').value;
+const inputLuas = document.getElementById('inputLuas');
+const inputTitik = document.getElementById('inputTitik');
+const hari = document.getElementById('hari');
+const labelHari = document.getElementById('labelHari');
+
+if (jenis === 'Banner') {
+
+inputLuas.style.display = 'block';
+inputTitik.style.display = 'none';
+
+hari.readOnly = true;
+hari.value = 1;
+labelHari.innerText = 'Periode (1 Bulan)';
+}
+
+else if (jenis === 'Tenda') {
+
+inputLuas.style.display = 'none';
+inputTitik.style.display = 'block';
+
+hari.readOnly = false;
+hari.value = 1;
+labelHari.innerText = 'Jumlah Hari';
+}
+
+else {
+
+inputLuas.style.display = 'none';
+inputTitik.style.display = 'block';
+
+hari.readOnly = true;
+hari.value = 1;
+labelHari.innerText = 'Periode (1 Bulan)';
+}
+
+}
+
+function updateGambar(){
+
+const lokasi = document.getElementById('lokasi').value;
+const jenis = document.getElementById('jenis').value;
+const gambar = document.getElementById('gambarJenis');
+
+if (lokasi === 'KB' && jenis === 'Banner') {
+gambar.src = "banner_kb.jpg";
+}
+else if (lokasi === 'KB' && jenis === 'Tenda') {
+gambar.src = "tenda_kb.jpg";
+}
+else if (lokasi === 'KB' && jenis === 'Kotak') {
+gambar.src = "kotak_kb.jpg";
+}
+else if (lokasi === 'UPT' && jenis === 'Banner') {
+gambar.src = "banner_upt.jpg";
+}
+else if (lokasi === 'UPT' && jenis === 'Tenda') {
+gambar.src = "tenda_upt.jpg";
+}
+else if (lokasi === 'UPT' && jenis === 'Kotak') {
+gambar.src = "kotak_upt.jpg";
+}
+
+}
+
+function hitungRetribusi(){
+
+const jenis = document.getElementById('jenis').value;
+const luas = parseFloat(document.getElementById('luas').value) || 0;
+const titik = parseFloat(document.getElementById('titik').value) || 0;
+const hari = parseFloat(document.getElementById('hari').value) || 0;
+
+let total = 0;
+
+if (jenis === 'Banner') {
+if (luas >= 1 && luas <= 4) total = 25000;
+else if (luas >= 5 && luas <= 8) total = 45000;
+else if (luas > 8) total = 65000;
+}
+
+if (jenis === 'Tenda') {
+total = 20000 * titik * hari;
+}
+
+if (jenis === 'Kotak') {
+total = 100000 * titik;
+}
+
+document.getElementById('hasil').innerText =
+'Total Retribusi: Rp ' + total.toLocaleString('id-ID');
+
+}
+
+function kirimWhatsApp(){
+
+const lokasi =
+document.getElementById('lokasi').value === 'KB'
+? 'KB Samsat Magetan'
+: 'UPT PPD Magetan';
+
+const jenis = document.getElementById('jenis').value;
+const luas = document.getElementById('luas').value;
+const titik = document.getElementById('titik').value;
+const hari = document.getElementById('hari').value;
+const nama = document.getElementById('namaPemesan').value;
+const hasil = document.getElementById('hasil').innerText;
+
+const nomorWA = '6281234567890';
+
+let ukuran = '';
+
+if (jenis === 'Banner') {
+ukuran = `Luas : ${luas} m2`;
+} else {
+ukuran = `Jumlah Titik : ${titik}`;
+}
+
+const pesan =
+`Permohonan Informasi Retribusi Jasa Usaha%0A%0A` +
+`Nama Pemesan : ${nama}%0A` +
+`Lokasi : ${lokasi}%0A` +
+`Jenis Iklan : ${jenis}%0A` +
+`${ukuran}%0A` +
+`Durasi : ${hari}%0A` +
+`${hasil}%0A%0A` +
+`Mohon ditindaklanjuti. Terima kasih.`;
+
+window.open(`https://wa.me/${+6281554664341}?text=${pesan}`, '_blank');
+
+}
+
+aturForm();
+updateGambar();
+
+</script>
+
+</body>
+</html>
