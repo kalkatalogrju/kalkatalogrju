@@ -1,306 +1,375 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KalKatalog RJU</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KalKatalog RJU</title>
 
-<!-- GOOGLE ANALYTICS -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XXXXXXXXXX');
-</script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            margin: 0;
+            padding: 30px;
+        }
 
-<style>
+        .container {
+            max-width: 750px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
 
-body{
-font-family:"Segoe UI",Arial,sans-serif;
-background: linear-gradient(135deg,#1e3c72,#2a5298);
-margin:0;
-padding:20px;
-min-height:100vh;
-}
+        h1 {
+            text-align: center;
+        }
 
-.container{
-max-width:750px;
-margin:auto;
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 15px 35px rgba(0,0,0,0.2);
-}
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
 
-.header{
-text-align:center;
-margin-bottom:20px;
-}
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
 
-.header h1{
-margin:0;
-color:#2c3e50;
-}
+        .logo img {
+            height: 70px;
+        }
 
-.header p{
-margin-top:5px;
-color:#666;
-font-size:14px;
-}
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
 
-label{
-display:block;
-margin-top:15px;
-font-weight:600;
-}
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
 
-input,select{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:6px;
-border:1px solid #ccc;
-font-size:14px;
-}
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-button{
-width:100%;
-padding:12px;
-margin-top:18px;
-border:none;
-border-radius:8px;
-background:#007bff;
-color:white;
-font-size:15px;
-cursor:pointer;
-}
+        button:hover {
+            background: #0056b3;
+        }
 
-button:hover{
-background:#0056b3;
-}
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
 
-.wa-btn{
-background:#25D366;
-}
+        .wa-btn {
+            background: #25D366;
+        }
 
-.result{
-margin-top:20px;
-padding:18px;
-background:#f1f8ff;
-border-radius:8px;
-font-size:18px;
-text-align:center;
-font-weight:bold;
-}
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef7ff;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
 
-.preview{
-margin-top:15px;
-text-align:center;
-}
+        .preview {
+            margin-top: 15px;
+            background: #eef3f9;
+            padding: 15px;
+            border-radius: 18px;
+            overflow: hidden;
+            /* ini yang membuat sudut benar-benar terpotong */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-.preview img{
-max-width:250px;
-border-radius:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.15);
-}
+        .preview img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 14px;
+            display: block;
+        }
 
-</style>
+        /* MODAL GAMBAR */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal span {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<div class="header">
-<h1>KalKatalog RJU</h1>
-<p>Kalkulator Katalog Retribusi Jasa Usaha</p>
-</div>
+        <div class="logo">
+            <img src="logo-jatim.png">
+        </div>
 
-<label>Titik Lokasi Pemasangan</label>
-<select id="lokasi" onchange="updateGambar()">
-<option value="KB">KB Samsat Magetan</option>
-<option value="UPT">UPT PPD Magetan</option>
-</select>
+        <h1>KalKatalog RJU</h1>
+        <div class="subtitle">Kalkulator Katalog Retribusi Jasa Usaha</div>
 
-<label>Jenis Pemasangan Iklan</label>
-<select id="jenis" onchange="aturForm(); updateGambar();">
-<option value="Banner">Spanduk / Banner / Baliho</option>
-<option value="Tenda">Tenda Promosi</option>
-<option value="Kotak">Kotak Promosi / Brosur</option>
-</select>
+        <label>Nama Pemesan</label>
+        <input type="text" id="namaPemesan">
 
-<div class="preview">
-<img id="gambarJenis" src="banner_kb.jpg">
-</div>
+        <label>Titik Lokasi Pemasangan</label>
+        <select id="lokasi" onchange="resetForm()">
+            <option value="KB">KB Samsat Magetan</option>
+            <option value="UPT">UPT PPD Magetan</option>
+        </select>
 
-<div id="inputLuas">
-<label>Luas Banner (m²)</label>
-<input type="number" id="luas" placeholder="Masukkan luas banner">
-</div>
+        <label>Jenis Pemasangan Iklan</label>
+        <select id="jenis" onchange="resetSaatGantiJenis()">
+            <option value="Banner">Spanduk / Banner / Baliho</option>
+            <option value="Tenda">Tenda Promosi</option>
+            <option value="Kotak">Kotak Promosi / Brosur</option>
+        </select>
 
-<div id="inputTitik" style="display:none;">
-<label>Jumlah Titik</label>
-<input type="number" id="titik" placeholder="Masukkan jumlah titik">
-</div>
+        <!-- PREVIEW GAMBAR SEKARANG DI SINI -->
+        <div class="preview">
+            <img id="previewGambar" src="banner-kb.jpg" onclick="bukaGambar()">
+        </div>
 
-<label id="labelHari">Periode (1 Bulan)</label>
-<input type="number" id="hari" value="1" readonly>
+        <div id="inputLuas">
+            <label>Luas Spanduk, Baliho, Banner (m²)</label>
+            <input type="number" id="luas">
+        </div>
 
-<label>Nama Pemesan</label>
-<input type="text" id="namaPemesan" placeholder="Masukkan nama pemesan">
+        <div id="inputTitik" style="display:none;">
+            <label>Jumlah Titik</label>
+            <input type="number" id="titik">
+        </div>
 
-<button onclick="hitungRetribusi()">Hitung Retribusi</button>
+        <label id="labelHari">Periode (1 Bulan)</label>
+        <input type="number" id="hari" value="1" readonly>
 
-<div class="result" id="hasil">
-Total Retribusi: Rp 0
-</div>
+        
 
-<button class="wa-btn" onclick="kirimWhatsApp()">
-Kirim via WhatsApp
-</button>
+        <button onclick="hitungRetribusi()">Hitung Retribusi</button>
 
-</div>
+        <div class="result" id="hasil">
+            Total Retribusi: Rp 0
+        </div>
 
-<script>
+        <button id="btnWA" class="wa-btn" onclick="kirimWhatsApp()" disabled>
+            Kirim via WhatsApp
+        </button>
 
-function aturForm() {
+    </div>
 
-const jenis = document.getElementById('jenis').value;
-const inputLuas = document.getElementById('inputLuas');
-const inputTitik = document.getElementById('inputTitik');
-const hari = document.getElementById('hari');
-const labelHari = document.getElementById('labelHari');
+    <script>
 
-if (jenis === 'Banner') {
+        function getGambar() {
+            const lokasi = document.getElementById('lokasi').value;
+            const jenis = document.getElementById('jenis').value;
 
-inputLuas.style.display = 'block';
-inputTitik.style.display = 'none';
+            if (lokasi === "KB" && jenis === "Banner") return "banner-kb.jpg";
+            if (lokasi === "KB" && jenis === "Tenda") return "tenda-kb.jpg";
+            if (lokasi === "KB" && jenis === "Kotak") return "brosur-kb.jpg";
+            
+            if (lokasi === "UPT" && jenis === "Banner") return "banner-upt.jpg";
+            if (lokasi === "UPT" && jenis === "Tenda") return "tenda-upt.jpg";
+            if (lokasi === "UPT" && jenis === "Kotak") return "brosur-upt.jpg";
 
-hari.readOnly = true;
-hari.value = 1;
-labelHari.innerText = 'Periode (1 Bulan)';
-}
+            return "";
+        }
 
-else if (jenis === 'Tenda') {
+        function updatePreview() {
+            const img = document.getElementById("previewGambar");
+            const gambar = getGambar();
 
-inputLuas.style.display = 'none';
-inputTitik.style.display = 'block';
+            if (gambar !== "") {
+                img.src = gambar;
+            }
+        }
 
-hari.readOnly = false;
-hari.value = 1;
-labelHari.innerText = 'Jumlah Hari';
-}
+        function aturForm() {
+            const jenis = document.getElementById('jenis').value;
+            const inputLuas = document.getElementById('inputLuas');
+            const inputTitik = document.getElementById('inputTitik');
+            const hari = document.getElementById('hari');
+            const label = document.getElementById('labelHari');
 
-else {
+            if (jenis === "Banner") {
+                inputLuas.style.display = "block";
+                inputTitik.style.display = "none";
+                hari.readOnly = true;
+                label.innerText = "Periode (1 Bulan)";
+            }
 
-inputLuas.style.display = 'none';
-inputTitik.style.display = 'block';
+            else if (jenis === "Tenda") {
+                inputLuas.style.display = "none";
+                inputTitik.style.display = "block";
+                hari.readOnly = false;
+                label.innerText = "Jumlah Hari";
+            }
 
-hari.readOnly = true;
-hari.value = 1;
-labelHari.innerText = 'Periode (1 Bulan)';
-}
+            else {
+                inputLuas.style.display = "none";
+                inputTitik.style.display = "block";
+                hari.readOnly = true;
+                label.innerText = "Periode (1 Bulan)";
+            }
 
-}
+            updatePreview();
+        }
 
-function updateGambar(){
+        function resetForm() {
+            document.getElementById('jenis').value = "Banner";
+            document.getElementById('luas').value = "";
+            document.getElementById('titik').value = "";
+            document.getElementById('namaPemesan').value = "";
+            document.getElementById('hari').value = 1;
+            document.getElementById('hasil').innerText = "Total Retribusi: Rp 0";
+            document.getElementById('btnWA').disabled = true;
 
-const lokasi = document.getElementById('lokasi').value;
-const jenis = document.getElementById('jenis').value;
-const gambar = document.getElementById('gambarJenis');
+            aturForm();
+            updatePreview();
+        }
 
-if (lokasi === 'KB' && jenis === 'Banner') {
-gambar.src = "banner_kb.jpg";
-}
-else if (lokasi === 'KB' && jenis === 'Tenda') {
-gambar.src = "tenda_kb.jpg";
-}
-else if (lokasi === 'KB' && jenis === 'Kotak') {
-gambar.src = "kotak_kb.jpg";
-}
-else if (lokasi === 'UPT' && jenis === 'Banner') {
-gambar.src = "banner_upt.jpg";
-}
-else if (lokasi === 'UPT' && jenis === 'Tenda') {
-gambar.src = "tenda_upt.jpg";
-}
-else if (lokasi === 'UPT' && jenis === 'Kotak') {
-gambar.src = "kotak_upt.jpg";
-}
+        function resetSaatGantiJenis() {
+            document.getElementById('luas').value = "";
+            document.getElementById('titik').value = "";
+            document.getElementById('hasil').innerText = "Total Retribusi: Rp 0";
+            document.getElementById('hari').value = 1;
+            document.getElementById('btnWA').disabled = true;
 
-}
+            aturForm();
+            updatePreview();
+        }
 
-function hitungRetribusi(){
+        function hitungRetribusi() {
 
-const jenis = document.getElementById('jenis').value;
-const luas = parseFloat(document.getElementById('luas').value) || 0;
-const titik = parseFloat(document.getElementById('titik').value) || 0;
-const hari = parseFloat(document.getElementById('hari').value) || 0;
+            const jenis = document.getElementById('jenis').value;
+            const luas = parseFloat(document.getElementById('luas').value) || 0;
+            const titik = parseFloat(document.getElementById('titik').value) || 0;
+            const hari = parseFloat(document.getElementById('hari').value) || 0;
 
-let total = 0;
+            let total = 0;
 
-if (jenis === 'Banner') {
-if (luas >= 1 && luas <= 4) total = 25000;
-else if (luas >= 5 && luas <= 8) total = 45000;
-else if (luas > 8) total = 65000;
-}
+            if (jenis === "Banner") {
+                if (luas >= 1 && luas <= 4) total = 25000;
+                else if (luas >= 5 && luas <= 8) total = 45000;
+                else if (luas > 8) total = 65000;
+            }
 
-if (jenis === 'Tenda') {
-total = 20000 * titik * hari;
-}
+            if (jenis === "Tenda") {
+                total = 20000 * titik * hari;
+            }
 
-if (jenis === 'Kotak') {
-total = 100000 * titik;
-}
+            if (jenis === "Kotak") {
+                total = 100000 * titik;
+            }
 
-document.getElementById('hasil').innerText =
-'Total Retribusi: Rp ' + total.toLocaleString('id-ID');
+            document.getElementById('hasil').innerText =
+                "Total Retribusi: Rp " + total.toLocaleString('id-ID');
 
-}
+            if (total > 0) {
+                document.getElementById('btnWA').disabled = false;
+            }
 
-function kirimWhatsApp(){
+        }
 
-const lokasi =
-document.getElementById('lokasi').value === 'KB'
-? 'KB Samsat Magetan'
-: 'UPT PPD Magetan';
+        function kirimWhatsApp() {
 
-const jenis = document.getElementById('jenis').value;
-const luas = document.getElementById('luas').value;
-const titik = document.getElementById('titik').value;
-const hari = document.getElementById('hari').value;
-const nama = document.getElementById('namaPemesan').value;
-const hasil = document.getElementById('hasil').innerText;
+            const lokasi =
+                document.getElementById('lokasi').value === 'KB'
+                    ? 'KB Samsat Magetan'
+                    : 'UPT PPD Magetan';
 
-const nomorWA = '6281234567890';
+            const jenis = document.getElementById('jenis').value;
+            const luas = document.getElementById('luas').value;
+            const titik = document.getElementById('titik').value;
+            const hari = document.getElementById('hari').value;
+            const nama = document.getElementById('namaPemesan').value;
+            const hasil = document.getElementById('hasil').innerText;
 
-let ukuran = '';
+            let ukuran = '';
 
-if (jenis === 'Banner') {
-ukuran = `Luas : ${luas} m2`;
-} else {
-ukuran = `Jumlah Titik : ${titik}`;
-}
+            if (jenis === "Banner") {
+                ukuran = `Luas : ${luas} m2`;
+            } else {
+                ukuran = `Jumlah Titik : ${titik}`;
+            }
 
-const pesan =
-`Permohonan Informasi Retribusi Jasa Usaha%0A%0A` +
-`Nama Pemesan : ${nama}%0A` +
-`Lokasi : ${lokasi}%0A` +
-`Jenis Iklan : ${jenis}%0A` +
-`${ukuran}%0A` +
-`Durasi : ${hari}%0A` +
-`${hasil}%0A%0A` +
-`Mohon ditindaklanjuti. Terima kasih.`;
+            const pesan =
+                `Permohonan Informasi Retribusi Jasa Usaha%0A%0A` +
+                `Nama : ${nama}%0A` +
+                `Lokasi : ${lokasi}%0A` +
+                `Jenis : ${jenis}%0A` +
+                `${ukuran}%0A` +
+                `Durasi : ${hari}%0A` +
+                `${hasil}`;
 
-window.open(`https://wa.me/${+6281554664341}?text=${pesan}`, '_blank');
+            window.open(`https://wa.me/6281234567890?text=${pesan}`, '_blank');
 
-}
+        }
 
-aturForm();
-updateGambar();
+        document.addEventListener("DOMContentLoaded", function () {
+            aturForm();
+            updatePreview();
+        });
+        function bukaGambar() {
+            const src = document.getElementById("previewGambar").src;
+            document.getElementById("gambarBesar").src = src;
+            document.getElementById("modalGambar").style.display = "flex";
+        }
 
-</script>
-
+        function tutupGambar() {
+            document.getElementById("modalGambar").style.display = "none";
+        }
+    </script>
+    <div id="modalGambar" class="modal" onclick="tutupGambar()">
+        <span>&times;</span>
+        <img id="gambarBesar">
+    </div>
 </body>
+
 </html>
