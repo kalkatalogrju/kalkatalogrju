@@ -167,7 +167,7 @@
 
         <label>Jenis Pemasangan Iklan</label>
         <select id="jenis" onchange="resetSaatGantiJenis()">
-            <option value="Banner">Spanduk / Banner / Baliho</option>
+            <option value="Spanduk / Banner / Baliho">Spanduk / Banner / Baliho</option>
             <option value="Tenda">Tenda Promosi</option>
             <option value="Kotak">Kotak Promosi / Brosur</option>
         </select>
@@ -210,11 +210,11 @@
             const lokasi = document.getElementById('lokasi').value;
             const jenis = document.getElementById('jenis').value;
 
-            if (lokasi === "KB" && jenis === "Banner") return "banner-kb.jpg";
+            if (lokasi === "KB" && jenis === "Spanduk / Banner / Baliho") return "banner-kb.jpg";
             if (lokasi === "KB" && jenis === "Tenda") return "tenda-kb.jpg";
             if (lokasi === "KB" && jenis === "Kotak") return "brosur-kb.jpg";
             
-            if (lokasi === "UPT" && jenis === "Banner") return "banner-upt.jpg";
+            if (lokasi === "UPT" && jenis === "Spanduk / Banner / Baliho") return "banner-upt.jpg";
             if (lokasi === "UPT" && jenis === "Tenda") return "tenda-upt.jpg";
             if (lokasi === "UPT" && jenis === "Kotak") return "brosur-upt.jpg";
 
@@ -237,7 +237,7 @@
             const hari = document.getElementById('hari');
             const label = document.getElementById('labelHari');
 
-            if (jenis === "Banner") {
+            if (jenis === "Spanduk / Banner / Baliho") {
                 inputLuas.style.display = "block";
                 inputTitik.style.display = "none";
                 hari.readOnly = true;
@@ -262,7 +262,7 @@
         }
 
         function resetForm() {
-            document.getElementById('jenis').value = "Banner";
+            document.getElementById('jenis').value = "Spanduk / Banner / Baliho";
             document.getElementById('luas').value = "";
             document.getElementById('titik').value = "";
             document.getElementById('namaPemesan').value = "";
@@ -294,7 +294,7 @@
 
             let total = 0;
 
-            if (jenis === "Banner") {
+            if (jenis === "Spanduk / Banner / Baliho") {
                 if (luas >= 1 && luas <= 4) total = 25000;
                 else if (luas >= 5 && luas <= 8) total = 45000;
                 else if (luas > 8) total = 65000;
@@ -333,7 +333,7 @@
 
             let ukuran = '';
 
-            if (jenis === "Banner") {
+            if (jenis === "Spanduk / Banner / Baliho") {
                 ukuran = `Luas : ${luas} m2`;
             } else {
                 ukuran = `Jumlah Titik : ${titik}`;
